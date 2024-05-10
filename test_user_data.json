@@ -1,0 +1,24 @@
+{
+    "user_settings": {
+      "balanse": 23994.87,
+      "income": 15000.0,
+      "consumption": -1005.13,
+      "increment": 2
+    },
+    "tranzaction": [
+      [
+        -1005.13,
+        "Buy products",
+        1,
+        "2024-05-01",
+        "consumption"
+      ],
+      [
+        15000.0,
+        "Salary",
+        2,
+        "2024-04-24",
+        "income"
+      ]
+    ]
+  }

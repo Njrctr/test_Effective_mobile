@@ -32,7 +32,7 @@ class Balanсer:
     def make_tranzaction(self, tranzaction: list) -> list[list[float, str, int, str, str]]:
         """Метод для совершения транзакции в общий пул транзакций"""
 
-        summ: float = tranzaction[0]
+        summ: float = round(tranzaction[0], 2)
         date: str = tranzaction[1]
         category: AppendType = tranzaction[2]
         description: str | None = tranzaction[3]
