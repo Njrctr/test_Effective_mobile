@@ -1,6 +1,6 @@
 from filter import AppendType, TypeSearch, get_date, get_summ
 
-default_day = []
+
     
 
 
@@ -29,7 +29,7 @@ class Balanсer:
 
 
 
-    def make_tranzaction(self, tranzaction: list) -> list[list]:
+    def make_tranzaction(self, tranzaction: list) -> list[list[float, str, int, str, str]]:
         """Метод для совершения транзакции в общий пул транзакций"""
 
         summ: float = tranzaction[0]
@@ -54,7 +54,7 @@ class Balanсer:
 
 
 
-    def search(self, by: TypeSearch, search: str) -> list | None:
+    def search(self, by: TypeSearch, search: str) -> list[float, str, int, str, str] | None:
         """Метод для поиска транзакций по определённым параметрам описанным в классе TypeSearch"""
 
         ll = []
@@ -71,7 +71,7 @@ class Balanсer:
                 elif search.lower() in ["расход", 'consum', 'out', 'con']:
                     search = AppendType.consumption
 
-                print(f"Транзакции по Категории {"Доход" if search == AppendType.income else "Расход"}:\n")
+                print(f"Транзакции по Категории {'Доход' if search == AppendType.income else 'Расход'}:\n")
                 ll +=  list(filter(lambda s: s[4] == search, self.user_data['tranzaction']))
                 
                         
@@ -82,7 +82,7 @@ class Balanсer:
         return ll
     
     
-    def edit(self, id: int) -> list[list]:
+    def edit(self, id: int) -> list[list[float, str, int, str, str]]:
         """Метод для редактирования выбранной транзакции"""
 
         if id > self.user_data["user_settings"]['increment']:
@@ -93,7 +93,7 @@ class Balanсer:
         for index, trans in enumerate(self.user_data['tranzaction']):
         
             if trans[2] == id: 
-                print(f"Текущие данные по транзакции:\n\nДата: {trans[3]} (Номер транзакции: {trans[2]})\nКатегория: {"Доход" if trans[4] == AppendType.income else "Расход"}\nСумма: {trans[0]}\nОписание: {trans[1] if trans[1] is not None else ''}\n")
+                print(f"Текущие данные по транзакции:\n\nДата: {trans[3]} (Номер транзакции: {trans[2]})\nКатегория: {'Доход' if trans[4] == AppendType.income else 'Расход'}\nСумма: {trans[0]}\nОписание: {trans[1] if trans[1] is not None else ''}\n")
                 match input("Дата - 1. Сумма - 2. Описание - 3.\nВыберите что хотите изменить, введите число:"):
                     case "1":
                         

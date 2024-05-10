@@ -78,7 +78,7 @@ def main(user_data: dict, user_input: str):
             print(f"""
 --------------------------------------------
 Дата: {trans[3]} (Номер транзакции: {trans[2]})
-Категория: {"Доход" if trans[4] == AppendType.income else "Расход"}
+Категория: {'Доход' if trans[4] == AppendType.income else 'Расход'}
 Сумма: {trans[0]}
 Описание: {trans[1] if trans[1] is not None else ''}
 --------------------------------------------""")
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     try:
         while True:
             print("Справка по командам: -h или --help")
-            print(f"Текущий баланс: {user_data["user_settings"]['balanse']} | Доходы: {user_data["user_settings"]['income']} | Расходы: {user_data["user_settings"]['consumption']}\n")
+            print(f"Текущий баланс: {user_data['user_settings']['balanse']} | Доходы: {user_data["user_settings"]['income']} | Расходы: {user_data['user_settings']['consumption']}\n")
             user_input = input("Выберите действие: ")
             
             os.system('cls' if os.name == 'nt' else 'clear')
