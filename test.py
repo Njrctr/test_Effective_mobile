@@ -2,7 +2,7 @@ from datetime import datetime
 import unittest
 
 from main2 import main as user_input
-from balanсer import AppendType, Balanсer, TypeSearch
+from balancer import AppendType, Balanсer, TypeSearch
 
 from filter import FilterByContext, Task, TaskType, get_date
 
