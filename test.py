@@ -1,7 +1,7 @@
 from datetime import datetime
 import unittest
 
-from main2 import main as user_input
+from main import main as user_input
 from balancer import AppendType, Balanсer, TypeSearch
 
 from filter import FilterByContext, Task, TaskType, get_date
@@ -97,7 +97,6 @@ class TestMainPreRelease(unittest.TestCase):
     "bycat in" : [[10.0, 'nefor', 3, '1999-07-12', 'income'], [10.0, '', 4, '2024-05-10', 'income'], [11.0, 'nefor', 5, '1999-07-12', 'income']],
     "bycat Доход" : [[10.0, 'nefor', 3, '1999-07-12', 'income'], [10.0, '', 4, '2024-05-10', 'income'], [11.0, 'nefor', 5, '1999-07-12', 'income']],
     "bycat consum" : [[ -10.0, '', 1, '2024-05-10', 'consumption'], [ -10.0, 'qwe', 2, '2024-05-10', 'consumption'],[-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
-    # 'wtf' :       [[-10.0, '', 1, '2024-05-10', 'consumption'], [-10.0, 'qwe', 2, '2024-05-10', 'consumption'], [-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
     'bycat con' : [[-10.0, '', 1, '2024-05-10', 'consumption'], [-10.0, 'qwe', 2, '2024-05-10', 'consumption'], [-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
     'bycat расход' : [[-10.0, '', 1, '2024-05-10', 'consumption'], [-10.0, 'qwe', 2, '2024-05-10', 'consumption'], [-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
     'bysum -10' : [[-10.0, '', 1, '2024-05-10', 'consumption'],[-10.0, 'qwe', 2, '2024-05-10', 'consumption']],
