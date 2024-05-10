@@ -75,12 +75,14 @@ def main(user_data: dict, user_input: str):
                 print(ex)   
                 return
     for trans in content:
+            category = 'Доход' if trans[4] == AppendType.income else 'Расход'
+            description = trans[1] if trans[1] is not None else ''
             print(f"""
 --------------------------------------------
 Дата: {trans[3]} (Номер транзакции: {trans[2]})
-Категория: {'Доход' if trans[4] == AppendType.income else 'Расход'}
+Категория: {category}
 Сумма: {trans[0]}
-Описание: {trans[1] if trans[1] is not None else ''}
+Описание: {description}
 --------------------------------------------""")
     return content
             
@@ -113,7 +115,8 @@ if __name__ == "__main__":
     try:
         while True:
             print("Справка по командам: -h или --help")
-            print(f"Текущий баланс: {user_data['user_settings']['balanse']} | Доходы: {user_data["user_settings"]['income']} | Расходы: {user_data['user_settings']['consumption']}\n")
+            balanse = round(user_data['user_settings']['balanse'], 2)
+            print(f"Текущий баланс: {balanse} | Доходы: {user_data["user_settings"]['income']} | Расходы: {user_data['user_settings']['consumption']}\n")
             user_input = input("Выберите действие: ")
             
             os.system('cls' if os.name == 'nt' else 'clear')
