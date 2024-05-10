@@ -1,10 +1,8 @@
 from datetime import datetime
-from typing import Any
 import unittest
-import json
 
 from main2 import main as user_input
-from balanser import AppendType, Balanser, TypeSearch
+from balanсer import AppendType, Balanсer, TypeSearch
 
 from filter import FilterByContext, Task, TaskType, get_date
 
@@ -18,7 +16,7 @@ class TestFilter(unittest.TestCase):
             "bycat consum" : Task(TaskType.search, ["bycat", "consum"]),
             "bycat con" : Task(TaskType.search, ["bycat", "con"]),
             "bycat расход" : Task(TaskType.search, ["bycat", "расход"]),
-            "bysumm -13" : Task(TaskType.search, ["bysumm", "-13"]),
+            "bysum -13" : Task(TaskType.search, ["bysum", "-13"]),
             "bydate 12:03:1995" : Task(TaskType.search, ["bydate", "12:03:1995"]),
             "bydate 11.02.1995" : Task(TaskType.search, ["bydate", "11.02.1995"]),
         }
@@ -50,12 +48,14 @@ class TestFilter(unittest.TestCase):
 class TestMainPreRelease(unittest.TestCase):
     date_now = str(datetime.today()).partition(' ')[0]
     predict_user_data = {
-    "-100" : {'user_settings': {'balanse': 9900.0, 'income': 0, 'consumption': -100.0, 'increment': 1}, 'tranzaction': [[-100.0, '', 1, date_now, 'consumption']]},
-    "-100 -d 20.09.2023" : {'user_settings': {'balanse': 9900.0, 'income': 0, 'consumption': -100.0, 'increment': 1}, 'tranzaction': [[-100.0, '', 1, '2023-09-20', 'consumption']]},
-    "-100 -d 20.09.2023 qwe 123" : {'user_settings': {'balanse': 9900.0, 'income': 0, 'consumption': -100.0, 'increment': 1}, 'tranzaction': [[-100.0, 'qwe 123', 1, '2023-09-20', 'consumption']]},
-    "100" : {'user_settings': {"balanse" : 10100.0,"income": 100.0,"consumption": 0,"increment": 1},'tranzaction': [[100.0,"",1, date_now,"income"]]},
-    "100 -d 20.09.2023" : {'user_settings': {"balanse" : 10100.0,"income": 100.0,"consumption": 0,"increment": 1},'tranzaction': [[100.0,"",1,"2023-09-20","income"]]},
-    "100 -d 20.09.2023 qwe 123" : {'user_settings': {"balanse" : 10100.0,"income": 100.0,"consumption": 0,"increment": 1},'tranzaction': [[100.0,"qwe 123",1,"2023-09-20","income"]]},
+    "-100" : [[-100.0, '', 1, date_now, AppendType.consumption]],
+    "-100.14" : [[-100.14, '', 1, date_now, AppendType.consumption]],
+    "-100 -d 20.09.2023" : [[-100.0, '', 1, '2023-09-20', AppendType.consumption]],
+    "-100 -d 20.09.2023 qwe 123" : [[-100.0, 'qwe 123', 1, '2023-09-20', AppendType.consumption]],
+    "100" : [[100.0,"",1, date_now, AppendType.income]],
+    "100.30" : [[100.3,"",1, date_now, AppendType.income]],
+    "100 -d 20.09.2023" : [[100.0,"",1,"2023-09-20", AppendType.income]],
+    "100 -d 20.09.2023 qwe 123" : [[100.0,"qwe 123",1,"2023-09-20", AppendType.income]],
 }
     default_user_data = {
     'user_settings': {
@@ -84,6 +84,47 @@ class TestMainPreRelease(unittest.TestCase):
 }
             self.assertEqual(user_input(default_user_data, trans), self.predict_user_data[trans], trans)
 
+
+    
+
+    def test_positive_user_search(self):
+    
+        
+        predict_user_data = {
+            
+    "bydate 10.05.2024" : [[-10.0, '', 1, '2024-05-10', 'consumption'], [-10.0, 'qwe', 2, '2024-05-10', 'consumption'], [10.0, '', 4, '2024-05-10', 'income']],
+    "bycat income" : [[10.0, 'nefor', 3, '1999-07-12', 'income'], [10.0, '', 4, '2024-05-10', 'income'], [11.0, 'nefor', 5, '1999-07-12', 'income']],
+    "bycat in" : [[10.0, 'nefor', 3, '1999-07-12', 'income'], [10.0, '', 4, '2024-05-10', 'income'], [11.0, 'nefor', 5, '1999-07-12', 'income']],
+    "bycat Доход" : [[10.0, 'nefor', 3, '1999-07-12', 'income'], [10.0, '', 4, '2024-05-10', 'income'], [11.0, 'nefor', 5, '1999-07-12', 'income']],
+    "bycat consum" : [[ -10.0, '', 1, '2024-05-10', 'consumption'], [ -10.0, 'qwe', 2, '2024-05-10', 'consumption'],[-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
+    # 'wtf' :       [[-10.0, '', 1, '2024-05-10', 'consumption'], [-10.0, 'qwe', 2, '2024-05-10', 'consumption'], [-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
+    'bycat con' : [[-10.0, '', 1, '2024-05-10', 'consumption'], [-10.0, 'qwe', 2, '2024-05-10', 'consumption'], [-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
+    'bycat расход' : [[-10.0, '', 1, '2024-05-10', 'consumption'], [-10.0, 'qwe', 2, '2024-05-10', 'consumption'], [-11.0, 'nefor', 6, '1999-07-12', 'consumption']],
+    'bysum -10' : [[-10.0, '', 1, '2024-05-10', 'consumption'],[-10.0, 'qwe', 2, '2024-05-10', 'consumption']],
+    'bysum 10' : [[10.0,'nefor', 3, '1999-07-12', 'income'],[10.0, '', 4, '2024-05-10','income']],
+    'bydate 12.07.1999' : [[10.0,'nefor', 3,'1999-07-12','income'], [11.0,'nefor', 5,'1999-07-12','income'], [-11.0,'nefor', 6,'1999-07-12','consumption']],
+}
+
+        
+         
+        for search_string in predict_user_data:
+            default_user_data = {
+    'user_settings': {
+        'balanse' : 10000,
+        "income": 0,
+        "consumption": 0,
+        "increment": 0
+    },
+    'tranzaction': [
+        [ -10.0, '', 1, '2024-05-10', 'consumption'],
+        [ -10.0, 'qwe', 2,"2024-05-10",'consumption'],
+        [10.0, "nefor", 3,"1999-07-12","income"],
+        [10.0, "", 4,"2024-05-10","income"],
+        [11.0,"nefor", 5,"1999-07-12","income"],
+        [-11.0,"nefor", 6,"1999-07-12",'consumption'],
+    ]
+}  
+            self.assertEqual(user_input(default_user_data, search_string), predict_user_data[search_string])
 
 
 if __name__ == "__main__":

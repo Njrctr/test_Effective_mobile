@@ -5,7 +5,7 @@ default_day = []
 
 
 
-class Balanser:
+class Balanсer:
     """Класс Balanser используется для управления транзакциями
     
     Atrrributes
@@ -29,7 +29,7 @@ class Balanser:
 
 
 
-    def make_tranzaction(self, tranzaction: list) -> dict:
+    def make_tranzaction(self, tranzaction: list) -> list[list]:
         """Метод для совершения транзакции в общий пул транзакций"""
 
         summ: float = tranzaction[0]
@@ -44,15 +44,12 @@ class Balanser:
 
         self.user_data["user_settings"]['increment'] += 1
 
+        correct_trans = [summ, description, self.user_data["user_settings"]['increment'], date, category.lower()]
 
-        self.user_data['tranzaction'].append([summ, description, self.user_data["user_settings"]['increment'], date, category.lower()])
+        self.user_data['tranzaction'].append(correct_trans)
 
-        print(f"""\nСовершена транзакция №{self.user_data["user_settings"]['increment']}:
-Дата: {date}
-Категория: {"Доход" if category == AppendType.income else "Расход"}
-Сумма: {summ}
-Описание: {description}\n\n""")
-        return self.user_data
+        print(f"Совершена транзакция:")
+        return [correct_trans]
 
 
 
@@ -71,7 +68,7 @@ class Balanser:
             case TypeSearch.by_category:
                 if search.lower() in ["доход", 'income', 'in']:
                     search = AppendType.income
-                elif search.lower() in ["расход", 'consum', 'out']:
+                elif search.lower() in ["расход", 'consum', 'out', 'con']:
                     search = AppendType.consumption
 
                 print(f"Транзакции по Категории {"Доход" if search == AppendType.income else "Расход"}:\n")
@@ -85,7 +82,7 @@ class Balanser:
         return ll
     
     
-    def edit(self, id: int):
+    def edit(self, id: int) -> list[list]:
         """Метод для редактирования выбранной транзакции"""
 
         if id > self.user_data["user_settings"]['increment']:

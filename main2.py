@@ -1,7 +1,8 @@
 import json
 import os
+from art import tprint
 
-from balanser import Balanser
+from balancer import Balanсer
 from filter import AppendType, FilterByContext, TaskType, TypeSearch, get_date, get_summ
 
 
@@ -14,6 +15,20 @@ def main(user_data: dict, user_input: str):
     split_user_input = user_input.split()
     if len(user_input) == 0:
         return
+    if split_user_input[0] in ['-h', '--help']:
+        print("""
+Создание записи о расходе/доходе:
+    [сумма] [-d [дата] : опционально. По умолчанию - сегодняшнее число] [Описание записи : опционально]    Например: -100500 -d 12.01.2024 Купил кофе в Старбакс.
+
+Редактирование записи дохода/расхода:
+    [-e] [id|номер транзакции]    Например: -e 1 . Далее выбираете пункт, который будете редактировать.
+
+Поиск транзакций:
+    [bydate] [дата транзакц(ии/ий)]    Выводит список всех транзакций по указанной дате. 
+    [bycat] [категория транзакц(ии/ий)]    Выводит список всех транзакций из указанной категории. 
+    [bysum] [сумма транзакц(ии/ий)]    Выводит список всех транзакций по указанной сумме. 
+""")
+        return
     try:
         task = FilterByContext(user_input).return_task()
     except ValueError as ex:
@@ -23,42 +38,51 @@ def main(user_data: dict, user_input: str):
     match task.task_type:
         case TaskType.search:
             if task.context[0] == TypeSearch.by_date:
-                search = get_date(task.context[1])
-                content = Balanser(user_data).search(TypeSearch.by_date, search)
+                try:
+                    search = get_date(task.context[1])
+                except Exception as ex:
+                    print(ex)
+                    return
 
             elif task.context[0] == TypeSearch.by_category:
-                print(task.context[1])
-                content = Balanser(user_data).search(TypeSearch.by_category, task.context[1])
+                search = task.context[1]
 
             elif task.context[0] == TypeSearch.by_summ:
-                search = get_summ(split_user_input[1])
-                content = Balanser(user_data).search(TypeSearch.by_summ, search)
+                search = get_summ(task.context[1])
+
+            else:
+                print("Неверно указана поисковая команда команда! Воспользуйтесь опцией --help или -h")
+                return 
+            
+            content = Balanсer(user_data).search(task.context[0], search)
 
             if len(content) == 0:
-                print("Нет транзакций удовлетворяющих поиску.")
+                print("Нет транзакций удовлетворяющих поиску.\n")
                 return
                 
         case TaskType.edit:
             try:
                 task_id = int(split_user_input[1])
-                content = Balanser(user_data).edit(task_id)
+                content = Balanсer(user_data).edit(task_id)
             except ValueError as ex:
                 print(ex)
                 return
         case TaskType.append:
             try:
                 correct_command = FilterByContext(task.context).return_correct_trans()
-                content = Balanser(user_data).make_tranzaction(correct_command)
-                return content
+                content = Balanсer(user_data).make_tranzaction(correct_command)
             except ValueError as ex:
                 print(ex)   
                 return
     for trans in content:
             print(f"""
+--------------------------------------------
 Дата: {trans[3]} (Номер транзакции: {trans[2]})
 Категория: {"Доход" if trans[4] == AppendType.income else "Расход"}
 Сумма: {trans[0]}
-Описание: {trans[1] if trans[1] is not None else ''}\n""")
+Описание: {trans[1] if trans[1] is not None else ''}
+--------------------------------------------""")
+    return content
             
       
 default_user_data = {
@@ -72,6 +96,7 @@ default_user_data = {
 }
 
 if __name__ == "__main__":
+    tprint("Balancer\nby xrnze")
     try: 
         with open(r"user_data.json", 'r') as file:
             user_data = json.load(file)
@@ -91,7 +116,7 @@ if __name__ == "__main__":
             print(f"Текущий баланс: {user_data["user_settings"]['balanse']} | Доходы: {user_data["user_settings"]['income']} | Расходы: {user_data["user_settings"]['consumption']}\n")
             user_input = input("Выберите действие: ")
             
-            # os.system('cls' if os.name == 'nt' else 'clear')
+            os.system('cls' if os.name == 'nt' else 'clear')
             main(user_data, user_input)
     except KeyboardInterrupt:
         print("\nВыход из программы...")

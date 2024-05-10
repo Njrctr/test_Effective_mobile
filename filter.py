@@ -1,12 +1,11 @@
 from datetime import datetime
 from strenum import StrEnum
-import datefinder
 
 class TypeSearch(StrEnum):
     """Строковые перечисления вариантов поиска"""
 
     by_category = "bycat"
-    by_summ = "bysumm"
+    by_summ = "bysum"
     by_date = "bydate"
 
 
@@ -44,7 +43,7 @@ class FilterByContext:
         """Вовзращает экземпляр Задачи в зависимости от аргументов переданных пользователем"""
         
         splited_user_input = self.user_input.split()
-        if splited_user_input[0] in ["bydate", "bysumm", "bycat"]:
+        if splited_user_input[0] in ["bydate", "bysum", "bycat"]:
             if len(splited_user_input) == 2:
                 return Task(TaskType.search, splited_user_input)
             else:
@@ -93,7 +92,6 @@ class FilterByContext:
         if len(command) > 3: # "-123 -d 20.12.2024 comment qwe"
 
             description =command[3]
-            print('description: ', description)
 
         return [summ, date, category, description]
     
@@ -102,8 +100,8 @@ class FilterByContext:
 def get_date(nocorrect: str) -> str:
     """Пробует получить валидную строку даты из введённых пользователем данных"""
 
+    nocorrect = nocorrect.replace(":", ".").replace("-", ".").replace("/", ".")
     try:
-        nocorrect = nocorrect.replace(":", ".").replace("-", ".").replace("/", ".")
         date = datetime.strptime(nocorrect, '%d.%m.%Y').isoformat().split(sep="T")[0]
         return date
     except ValueError:
@@ -112,8 +110,8 @@ def get_date(nocorrect: str) -> str:
 
 def get_summ(nocorrect: str) -> float:
     """Пробует получить валидное число float из введённых пользователем данных"""
-    nocorrect = nocorrect.replace(",", ".")
 
+    nocorrect = nocorrect.replace(",", ".")
     if len(nocorrect.split(sep='.')) > 1 and len(nocorrect.split(sep='.')[1]) > 2:
         raise ValueError("[---]Недопустимое количество знаков после точки.") 
     try:
@@ -121,5 +119,4 @@ def get_summ(nocorrect: str) -> float:
 
         return summ
     except ValueError:
-        # print("[---]Неверный формат ввода суммы, попробуйте снова.")
         raise ValueError("[---]Неверный формат ввода суммы, попробуйте снова.")
