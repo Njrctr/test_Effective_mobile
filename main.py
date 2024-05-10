@@ -116,7 +116,7 @@ if __name__ == "__main__":
         while True:
             print("Справка по командам: -h или --help")
             balanse = round(user_data['user_settings']['balanse'], 2)
-            print(f"Текущий баланс: {balanse} | Доходы: {user_data["user_settings"]['income']} | Расходы: {user_data['user_settings']['consumption']}\n")
+            print(f"Текущий баланс: {balanse} | Доходы: {user_data['user_settings']['income']} | Расходы: {user_data['user_settings']['consumption']}\n")
             user_input = input("Выберите действие: ")
             
             os.system('cls' if os.name == 'nt' else 'clear')
